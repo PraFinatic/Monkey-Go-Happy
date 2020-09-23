@@ -1,0 +1,88 @@
+var ground=createSprite(200,380,500,5);
+//var invisibleGround = createSprite(200,385,400,5);
+//invisibleGround.visible = false;
+var monkey = createSprite(50,370,20,50);
+monkey.setAnimation("monkey");
+monkey.scale=0.1;
+var obstacle=createSprite(200,200,10,10);
+var ObstaclesGroup = createGroup();
+var fruitGroup= createGroup();
+var score=0;
+var PLAY=1;
+var END=0;
+var gameState=1;
+
+//
+function draw() {
+ 
+background("white");createEdgeSprites();
+ground.setAnimation("meadow_1");
+monkey.collide(bottomEdge); 
+//add gravity
+monkey.velocityY = monkey.velocityY + 0.8;
+//if (monkey.isTouching("ObstaclesGroup")) {
+ground.velocityX=-4;
+ground.x=ground.width/1;
+ground.scale=2;
+if(keyDown("space") && monkey.y  >= 359){
+  monkey.velocityY = -12 ;
+}
+if (fruitGroup.isTouching(monkey)) {
+  fruitGroup.destroyEach();
+  score=score+2;
+}
+if (ObstaclesGroup.isTouching(monkey)) {
+  monkey.scale=0.05
+}
+
+    
+spawnObstacles();
+//reset(); 
+fruits();
+drawSprites ();
+
+//compactination concept
+//score=Math.round(frameCount/60);
+text("score="+score,350,38);
+}
+function spawnObstacles() {
+
+if(World.frameCount % 70 === 0) {
+var obstacle = createSprite(400,365,10,40);
+obstacle.velocityX = -6;
+
+//generate random obstacles
+obstacle.setAnimation("Stone");
+//scale and lifetime
+
+obstacle.scale = 0.2;
+obstacle.lifetime = 70;
+//add each obstacle to the group
+ObstaclesGroup.add(obstacle);
+  }
+}
+
+function fruits(){
+ if (World.frameCount % 60 === 0) {
+    var banana =createSprite(400,randomNumber(0,300),10,10);
+    //banana.y=randomNumber(0,300);
+    banana.velocityX=-6;
+    banana.setAnimation("Banana");
+    banana.scale=0.05;
+    fruitGroup.add(banana)
+  }
+   
+  
+}
+
+
+
+
+
+/*function reset(){
+  if (monkey.isTouching(obstacle)) {
+      monkey.velocityX=0;
+    obstacle.velocityX=0;
+  }
+}  */
+
